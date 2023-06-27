@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PrintPractical Vref Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      margin: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333333;
+    }
+
+    form {
+      background-color: #ffffff;
+      padding: 50px;
+      border-radius: 8px;
+      box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      color: #333333;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #cccccc;
+      border-radius: 4px;
+    }
+
+    input[type="radio"] {
+      margin-right: 5px;
+    }
+
+    #calculateBtn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #4caf50;
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    #calculateBtn:hover {
+      background-color: #45a049;
+    }
+
+    #vrefResult {
+      margin-top: 20px;
+      padding: 8px;
+      border: 1px solid #cccccc;
+      border-radius: 4px;
+      width: 100%;
+      background-color: #f5f5f5;
+      color: #333333;
+      font-weight: bold;
+    }
+
+    .stepper-link {
+      color: #337ab7;
+      text-decoration: none;
+    }
+
+    .stepper-link:hover {
+      text-decoration: underline;
+    }
+
+    .youtube-button {
+      display: inline-block;
+      background-color: #ff0000;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+      text-align: center;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      line-height: 1;
+    }
+
+    .youtube-button:hover {
+      background-color: #cc0000;
+    }
+
+    @media screen and (min-width: 480px) {
+      form {
+        max-width: 400px;
+        margin: 0 auto;
+      }
+
+      input[type="number"] {
+        width: 100%;
+      }
+
+      #calculateBtn {
+        width: 100%;
+      }
+
+      #vrefResult {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>PrintPractical Vref Calculator</h1>
+
+  <form>
+    <label for="motorCurrent">Motor Current:</label>
+    <input type="number" id="motorCurrent" step="0.05" min="0.1" value="0.9" required>
+
+    <label for="rSense">RSense:</label>
+    <input type="number" id="rSense" step="1" min="1" value="110" required>
+
+    <label>Stepper Driver:</label>
+    <label>
+      <input type="radio" name="stepperMotor" value="2208" checked>
+      <a href="https://datasheetspdf.com/pdf-file/1142004/TRINAMIC/TMC2208/1" class="stepper-link" target="_blank">2208</a>
+    </label>
+    <label>
+      <input type="radio" name="stepperMotor" value="2209">
+      <a href="https://datasheetspdf.com/pdf-file/1393077/TRINAMIC/TMC2209/1" class="stepper-link" target="_blank">2209</a>
+    </label>
+
+    <button type="button" id="calculateBtn" onclick="calculateVref()">Calculate</button>
+
+    <label for="vrefResult">Vref:</label>
+    <input type="text" id="vrefResult" disabled>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="https://www.youtube.com/PrintPractical" class="youtube-button" target="_blank">
+          <img src="https://www.gstatic.com/youtube/img/branding/youtubelogo/svg/youtubelogo.svg" alt="YouTube Logo" height="30" width="30" style="vertical-align: middle;">
+          Visit My YouTube Channel
+        </a>
+      </div>
+  </form>
+
+  <script>
+    function calculateVref() {
+      // Get the input values
+      var motorCurrent = parseFloat(document.getElementById('motorCurrent').value);
+      var rSense = parseFloat(document.getElementById('rSense').value);
+      var stepperMotor = document.querySelector('input[name="stepperMotor"]:checked').value;
+      var stepperVal = 20;
+
+      // Different val depending on motor
+      if(stepperMotor == '2208') {
+        stepperVal = 30;
+      } else if(stepperMotor == '2209') {
+        stepperVal = 20;
+      }
+
+      // Perform the calculation
+      var vref = (motorCurrent / Math.sqrt(2)) / ((325 / (rSense + stepperVal)) * (1 / Math.sqrt(2)) * (1 / 2.5))
+
+      // Display the result
+      document.getElementById('vrefResult').value = vref.toFixed(2);
+    }
+  </script>
+</body>
+</html>

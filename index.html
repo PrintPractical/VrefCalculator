@@ -160,6 +160,9 @@
         stepperVal = 20;
       }
 
+      // Current Safety
+      motorCurrent -= (motorCurrent * 0.20);
+
       // Perform the calculation
       var vref = (motorCurrent / Math.sqrt(2)) / ((325 / (rSense + stepperVal)) * (1 / Math.sqrt(2)) * (1 / 2.5))
 
